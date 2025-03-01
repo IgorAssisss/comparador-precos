@@ -7,11 +7,13 @@ from config import supabase
 
 def setup_driver():
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")     
-    options.add_argument('--disable-gpu')
-    options.add_argument('--window-size=1920x1080')
-    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    options.add_argument("--headless")  # 🔹 Modo sem interface gráfica (obrigatório no Streamlit Cloud)
+    options.add_argument("--no-sandbox")  # 🔹 Necessário para ambientes sem interface gráfica
+    options.add_argument("--disable-dev-shm-usage")  # 🔹 Evita problemas de memória
+    options.add_argument("--disable-gpu")  # 🔹 Necessário para evitar erros em alguns servidores
+    options.add_argument("--window-size=1920x1080")  # 🔹 Garante que as páginas carreguem corretamente
 
+    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 def scrape_google_shopping_offers(driver, product_id, product_name, brand,):
     offer_url = f"https://www.google.com/shopping/product/{product_id}/offers"
     driver.get(offer_url)
